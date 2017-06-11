@@ -1,0 +1,22 @@
+{% extends '_base.html' %}
+
+{% block content %}{% endblock content %}
+
+{% block script %}
+  <script>
+    var socket = new WebSocket('ws://' + window.location.host + '/request');
+
+	socket.onmessage = function(e) {
+	    alert(e.data);
+	}
+
+	socket.onopen = function() {
+		console.log('Connected to Server');
+	    socket.send(JSON.stringify({'text':'hello world', 'connid':10, 'time':3}));
+	}
+
+    if (socket.readyState == WebSocket.OPEN) {
+      socket.onopen();
+    }
+  </script>
+{% endblock script %}
