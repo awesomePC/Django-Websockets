@@ -28,37 +28,27 @@
 
 {% block script %}
   <script>
-    var requestSocket = new WebSocket('ws://' + window.location.host + '/request');
-    var statusSocket = new WebSocket('ws://' + window.location.host + '/serverStatus');
-    var killSocket = new WebSocket('ws://' + window.location.host + '/kill');
+    var requestSocket = new WebSocket('ws://' + window.location.host);
 
    	requestSocket.onmessage = function(e) {
 		    document.getElementById('res-data').innerHTML = e.data;
 	}
 
-   	statusSocket.onmessage = function(e) {
-	    document.getElementById('res-data').innerHTML = e.data;
-	}
-
-	killSocket.onmessage = function(e) {
-	    document.getElementById('res-data').innerHTML = e.data;
-	}
-
     function request(){
     	var conn_id = document.getElementById('req-conn').value;
     	var time = document.getElementById('req-time').value;
-		requestSocket.send(JSON.stringify({'connid':conn_id, 'time':time}));
+		requestSocket.send(JSON.stringify({'connid':conn_id, 'time':time, 'route':'request'}));
     }
 
     function status(){
     	var conn_id = document.getElementById('req-conn').value;
     	var time = document.getElementById('req-time').value;
-		statusSocket.send(JSON.stringify({'connid':conn_id}));
+		requestSocket.send(JSON.stringify({'connid':conn_id, 'route':'status'}));
     }
 
     function kill(){
     	var conn_id = document.getElementById('kill-conn').value;
-		killSocket.send(JSON.stringify({'connid':conn_id}));
+		requestSocket.send(JSON.stringify({'connid':conn_id, 'route':'kill'}));
     }
   </script>
 {% endblock script %}
