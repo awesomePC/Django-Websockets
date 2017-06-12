@@ -1,22 +1,64 @@
 {% extends '_base.html' %}
 
-{% block content %}{% endblock content %}
+{% block content %}
+	<div class="row">
+		<div class="col-md-6 col-sm-6 left-side">
+			<div class="request-section">
+				<label for="conn_id">Connection ID: </label>
+				<input type="text" name="conn_id" id="req-conn"></input>
+				<label for="time">Time: </label>
+				<input type="text" name="time" id="req-time"></input>
+				<button onClick="request()">Request API</button>
+			</div>
+			<div class="kill-section">
+				<label for="conn_id">Connection ID: </label>
+				<input type="text" name="conn_id" id="kill-conn"></input>
+				<button onClick="kill()">Kill API</button>
+			</div>
+			<div class="status-section">
+				<button onClick="status()">Status Service API</button>
+			</div>
+		</div>
+
+		<div class="col-md-6 col-sm-6 right-side">
+			<p id="res-data"></p>
+		</div>
+	</div>
+{% endblock content %}
 
 {% block script %}
   <script>
-    var socket = new WebSocket('ws://' + window.location.host + '/request');
+    var requestSocket = new WebSocket('ws://' + window.location.host + '/request');
+    var statusSocket = new WebSocket('ws://' + window.location.host + '/serverStatus');
+    var killSocket = new WebSocket('ws://' + window.location.host + '/kill');
 
-	socket.onmessage = function(e) {
-	    alert(e.data);
+   	requestSocket.onmessage = function(e) {
+		    document.getElementById('res-data').innerHTML = e.data;
 	}
 
-	socket.onopen = function() {
-		console.log('Connected to Server');
-	    socket.send(JSON.stringify({'text':'hello world', 'connid':10, 'time':3}));
+   	statusSocket.onmessage = function(e) {
+	    document.getElementById('res-data').innerHTML = e.data;
 	}
 
-    if (socket.readyState == WebSocket.OPEN) {
-      socket.onopen();
+	killSocket.onmessage = function(e) {
+	    document.getElementById('res-data').innerHTML = e.data;
+	}
+
+    function request(){
+    	var conn_id = document.getElementById('req-conn').value;
+    	var time = document.getElementById('req-time').value;
+		requestSocket.send(JSON.stringify({'connid':conn_id, 'time':time}));
+    }
+
+    function status(){
+    	var conn_id = document.getElementById('req-conn').value;
+    	var time = document.getElementById('req-time').value;
+		statusSocket.send(JSON.stringify({'connid':conn_id}));
+    }
+
+    function kill(){
+    	var conn_id = document.getElementById('kill-conn').value;
+		killSocket.send(JSON.stringify({'connid':conn_id}));
     }
   </script>
 {% endblock script %}

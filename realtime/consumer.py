@@ -9,11 +9,11 @@ KILL_LIST = {}
 
 def _execute(message, connId, timeToSleep):
     CONN_TIMEOUT[connId] = timeToSleep
-    KILL_LIST[connId] = False
+    KILL_LIST[connId] = 0
     isKilled = False 
 
     for i in range(0, timeToSleep):
-    	if not KILL_LIST[connId]:
+    	if KILL_LIST[connId] == 0:
 	    	time.sleep(1)
 	    	CONN_TIMEOUT[connId] -= 1
         else:
@@ -29,24 +29,30 @@ def _execute(message, connId, timeToSleep):
     	message.reply_channel.send({'text':str('{\'status\':\'Ok\'}')})	
 
 def ws_message(message):
-    jsonObj = json.loads(message['text'])
-    timeToSleep = jsonObj['time']
-    connId = str(jsonObj['connid'])
-    print 'Connection ID: ' + connId + ' and Timeout: ' + str(timeToSleep)
+	print 'MSG'
+	jsonObj = json.loads(message['text'])
+	timeToSleep = int(jsonObj['time'])
+	connId = jsonObj['connid']
 
-    threading.Thread(target=_execute, args=(message, connId, timeToSleep)).start()
+	if CONN_TIMEOUT.get(connId) > 0:
+		pass
+	else:
+		threading.Thread(target=_execute, args=(message, connId, timeToSleep)).start()
 
 def ws_kill(message):
+	print 'KILL'
+	print KILL_LIST
 	jsonObj = json.loads(message['text'])
-	connId = str(jsonObj['connid'])
+	connId = jsonObj['connid']
 
-	if KILL_LIST.get(connId):
-		KILL_LIST[connId] = True
+	if KILL_LIST.get(connId) == 0:
+		KILL_LIST[connId] = 1
 		message.reply_channel.send({'text':str('{\'status\':\'Ok\'}')})
 	else:
-		message.reply_channel.send({'text':str('{\'status\':\'Invalid connection Id : <connId>\'}')})
+		message.reply_channel.send({'text':str('{\'status\':\'Invalid connection Id\'}')})
 
 def ws_status(message):
+	print 'Status'
 	message.reply_channel.send({'text':str(CONN_TIMEOUT)})
 
 def ws_connect(message):
