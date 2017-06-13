@@ -40,7 +40,6 @@ Setting up the environment
 $ sudo pip install -r requirements.txt
 ```
 
-
 Running the application
 -----------------------
 
@@ -48,3 +47,12 @@ Running the application
 $ redis-server
 $ python manage.py runserver
 ```
+
+References
+----------
+
+https://realpython.com/blog/python/getting-started-with-django-channels/
+https://medium.com/@johngrant/raspberry-pi-and-django-channels-8d5cddb36226
+http://masnun.rocks/2016/09/25/introduction-to-django-channels/
+http://www.machinalis.com/blog/introduction-to-django-channels/
+https://www.kmaschta.me/blog/2016/10/16/websocket-based-app-with-django-channels-and-react/

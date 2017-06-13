@@ -3,3 +3,13 @@ asgi-redis==1.0.0
 Django==1.8.11
 channels==0.17.2
 Twisted==16.2.0
+daphne==0.15.0
+asgiref==1.0.0
+msgpack-python==0.4.8
+six==1.10.0
+zope.interface==4.1.1
+autobahn==0.17.2
+constantly==15.1.0
+incremental==16.10.1
+Automat==0.5.0
+txaio==2.6.1
