@@ -1,0 +1,6 @@
+*.pyc
+.DS_STORE
+*.db
+*.sqlite3
+*.txt
+*.cpp
