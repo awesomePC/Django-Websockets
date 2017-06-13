@@ -37,6 +37,8 @@ Setting up the environment
 --------------------------
 
 ```bash
+$ git clone https://github.com/rahulxxarora/Django-Websockets
+$ cd Django-Websockets
 $ virtualenv venv
 $ source venv/bin/activate
 $ sudo pip install -r requirements.txt
